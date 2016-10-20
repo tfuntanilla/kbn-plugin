@@ -44,29 +44,14 @@ uiModules
 
 })
 .controller('listOfEntitiesPageController', function ($routeParams, $http, $uibModal) {
-  
+
   this.index = $routeParams.name;
-
-  this.newEntity = false;
-  this.searchEntity = false;
-
   $http.get(`../api/log_engine/index/${this.index}`).then((response) => {
     this.entities = response.data;
   });
 
-  // create and save new entity
-  this.createNewEntity = function() {
-
-    if (!this.newEntity) {
-      this.newEntity = true;
-    } else {
-      this.newEntity = false;
-    }
-
-  };
-
   // search for entity via query
-  this.searchRequest = function(){
+  this.searchRequest = function() {
 
     $http.post(`http://127.0.0.1:8080/api/log_engine/querysearch/${this.index}`, this.query).then((response) =>{ 
       this.entities = response.data;
@@ -74,12 +59,40 @@ uiModules
 
   };
 
-
-  this.items = ['item1', 'item2', 'item3'];
-
   this.animationsEnabled = true;
 
-  this.open = function (size, entity) {
+  // create and save new entity
+  this.createNewEntity = function(size) {
+
+    let $scope = this;
+
+    var modalInstance = $uibModal.open({
+      animation: this.animationsEnabled,
+      templateUrl: 'newEntityModal.html',
+      controller: function($scope, $uibModalInstance){
+
+        $scope.save = function() {
+          $uibModalInstance.close();
+        };
+
+        $scope.cancel = function() {
+          $uibModalInstance.dismiss('cancel');
+        };
+      },
+      size: size,
+      resolve: {
+        
+      }
+    });
+
+    modalInstance.result.then(function() {
+      console.log('Modal dismissed at: ' + new Date());
+    });
+
+  };
+
+  // update entity
+  this.updateEntity = function (size, entity) {
 
     console.log(entity);
     let $scope = this;
@@ -141,9 +154,7 @@ uiModules
       this.entities = response.data;
     });
   };
-
 })
-
 //TODO figure out ngSanitize 
 .directive('contenteditable', ['$sce', function($sce) {
   return {
