@@ -1,0 +1,102 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-10">
+      <h1>Welcome to Explorer</h1>
+
+      <br/>
+
+      <!-- TODO -->
+      <!-- On click, only the entity that matches the search will be displayed -->
+      <!-- There will be a link on that entity -->
+      <!-- On click of link, show pop up modal with list of entities that can be joined and update button -->
+      <form class="form-inline">
+        <div class="form-group">
+          <input ng-model="ctrl.query" type="text" class="form-control" placeholder="{'query':{'match':'example'}}">
+          <button class="btn btn-secondary" type="button" ng-click="ctrl.searchRequest()">Search</button>
+          <button class="btn btn-primary" type="button" ng-click="ctrl.createNewEntity()">New</button>
+        </div>
+      </form>
+
+      <div ng-show="ctrl.newEntity" class="ng-hide">
+        <p>Enter and save a new entity:</p>
+        <textarea class="form-control" rows="5"></textarea>
+        <br/>
+        <button type="button" class="btn btn-default btn-sm" ng-click="">Save</button>
+      </div>
+
+      <br/>
+
+      <!-- ENTITIES --> 
+      <div>   
+        <!-- TODO Get the css/styles to work -->
+        <div ng-show="ctrl.entities.length > 1">
+          <div ng-repeat="entity in ctrl.entities track by $index">
+            <pre><json-formatter open="1" json="entity"></json-formatter></pre>
+
+            <!-- TODO -->
+            <!-- The link goes here and when that link is clicked, a modal will show -->
+            <!-- Not sure if this link is part of the entity or something separate? but get modal to show first-->
+            <pre ng-click="ctrl.open('lg', entity)">Link</pre>
+
+          </div>
+
+        </div>
+
+        <div>
+          <pre ng-show="ctrl.entities.length === 1" class="ng-hide"><json-formatter open="1" json="ctrl.entity"></json-formatter></pre>
+        </div>
+
+      </div>
+
+
+
+      <!--
+      <input type="text" ng-model="ctrl.query" placeholder="{'query':{'match':'example'}}"/>
+      <button type="button" class="btn btn-default btn-sm" ng-click="ctrl.getRequest()">Search</button>
+
+      <h2>Select an Entity</h2>
+      <ul ng-show="ctrl.entities.length > 1">
+        <li ng-repeat="entity in ctrl.entities track by $index">
+          <pre>{{entity | json}}</pre>
+          <a href="#/index/{{ctrl.index}}/type/{{entity._type}}/update/{{entity._id}}">Save</a>
+          <a href="#/index/{{ctrl.index}}/type/{{entity._type}}/update/{{entity._id}}">Update</a>
+          <a ng-click="delete()">Delete</a>
+          <a href="#/index/{{ctrl.index}}/nest/{{entity._id}}/parent">Nest x into this</a>
+          <a href="#/index/{{ctrl.index}}/nest/{{entity._id}}/child">Nest this into x</a>
+          <button type="button" class="btn btn-default" ng-click="$ctrl.open('lg')">Save</button>
+        </li>
+      </ul>
+      <div>
+        <pre ng-show="ctrl.entities.length === 1">{{ctrl.entity | json}}</pre>
+        <a href="#/index/{{ctrl.index}}/type/message/update/{{ctrl.id}}">Update</a>
+        <a ng-click="delete()">Delete</a>
+        <a href="#/index/{{ctrl.index}}/nest/{{ctrl.id}}/parent">Nest x into this</a>
+        <a href="#/index/{{ctrl.index}}/nest/{{ctrl.id}}/child">Nest this into x</a>
+      </div>
+
+      -->
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="updateModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Update Entity</h3>
+    </div>
+    <div class="modal-body">
+       <!--  <ul>
+            <li ng-repeat="item in items">
+                <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
+            </li>
+        </ul>
+        Selected: <b>{{ selected.item }}</b> -->
+        <pre>{{entity | json}}</pre>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
