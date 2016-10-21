@@ -19,8 +19,6 @@
     "@elastic/plugin-helpers": "5.0.0-beta2"
   },
   "dependencies": {
-    "angular-sanitize": "^1.5.8",
-    "angular-ui-bootstrap": "^2.2.0",
-    "jsonformatter": "^0.6.0"
+    "angular-ui-bootstrap": "^2.2.0"
   }
 }

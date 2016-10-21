@@ -38,10 +38,7 @@ export default function (server) {
     }
   });
 
-  // Add a route to retrieve search results from a particular index
   server.route({
-    // We can use path variables in here, that can be accessed on the request
-    // object in the handler.
     path: '/api/log_engine/index/{name}',
     method: 'GET',
     handler(req, reply) {
@@ -87,7 +84,6 @@ export default function (server) {
             }
           }
 
-        
       }).then(function(response){
         reply(response._source);
       });
