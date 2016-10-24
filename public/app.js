@@ -5,6 +5,7 @@ import 'ui/autoload/styles';
 
 import listOfIndicesPage from './templates/index.html';
 import mainPage from './templates/main.html';
+import jsonFormatter from 'jsonformatter';
 
 import _ from 'lodash';
 import 'angular-ui-bootstrap';
@@ -24,7 +25,7 @@ uiRoutes
 
 
 uiModules
-.get('app/log_engine', ['ui.bootstrap'])
+.get('app/log_engine', ['ui.bootstrap', 'jsonFormatter'])
 .controller('listOfIndicesPageController', function ($http) {
 
   $http.get('../api/log_engine/indices').then((response) => {
@@ -34,21 +35,25 @@ uiModules
 })
 .controller('mainPageController', function ($routeParams, $http, $uibModal) {
 
+  // TODO
+  // call fetch entities API
+  // put all saved entities in an array
+
   this.index = $routeParams.name;
 
   // search for entity via query
   this.getResults = function() {
 
-    
-    
-    // if (nameSearch)
-    // get method with entity name as the require parameter
-    // else
-    // post method with query as the required body
-    $http.post(`http://127.0.0.1:8080/api/log_engine/querysearch/${this.index}`, this.query).then((response) =>{ 
-      this.entities = response.data;
-    });
+    // TODO 
+    // call API for querying via entity name
+    // $http.get(`...`).then((response) => {
+    //   this.entities = data;
+    // };
 
+  };
+
+  this.displayResults = function(data) {
+    this.entities = data;
   };
 
   this.animationsEnabled = true;
@@ -57,58 +62,63 @@ uiModules
 
     let $scope = this;
 
+    // not to be assigned to any other value throughout this function
+    // this needs to be the parent window
+    let $ctrl = this;
+
     var modalInstance = $uibModal.open({
       animation: this.animationsEnabled,
       templateUrl: 'modal.html',
       controller: function($scope, $uibModalInstance) {
 
-        $scope.isValid = false;
+        console.log($ctrl);
+        
+        $scope.save = function() {
 
-        $scope.validationErrorAlert = false;
-
-        $scope.validateButton = true;
-        $scope.saveButton = false;
-        $scope.queryButton = false;
-
-        $scope.validate = function() {
+          var isValidQuery = false;
 
           // TODO
-          // validate method
-          // $http.post(`http://127.0.0.1:8080/api/log_engine/querysearch/${this.index}`, this.query).then((response) =>{ 
-          //  $scope.isValid = get this from the response
-          // });
-
-          $scope.isValid = false;
-
-          if ($scope.isValid) {
-            $scope.validateButton = false;
-            $scope.saveButton = true;
-            $scope.queryButton = true;
-          } else {
-            $scope.validationErrorAlert = true; 
-          }
-
+          // change the API call to save API
+          $http.get(`../api/log_engine/index/bank`).then((response) => {
+            isValidQuery = true;
+            $scope.data = response.data;
+            if (isValidQuery) {
+              $ctrl.displayResults($scope.data);
+              $scope.validationErrorAlert = false;
+              $uibModalInstance.close();
+            } else {
+              $scope.validationErrorAlert = true;
+            }
+          });
         };
 
-        $scope.save = function() {
-          $uibModalInstance.close();
-        };
 
         $scope.query = function() {
 
-          // TODO
-          // query method
+          var isValidQuery = false;
 
+          // TODO
+          // change the API call to query API
+          $http.get(`../api/log_engine/index/bank`).then((response) => {
+            isValidQuery = false;
+            $scope.data = response.data;
+            if (isValidQuery) {
+              $ctrl.displayResults($scope.data);
+              $scope.validationErrorAlert = false;
+              $uibModalInstance.close();
+            } else {
+              $scope.validationErrorAlert = true;
+            }
+          });
         };
 
         $scope.cancel = function() {
+          $scope.validationErrorAlert = false;
           $uibModalInstance.dismiss('cancel');
         };
       },
       size: size,
-      resolve: {
-        
-      }
+      resolve: { }
     });
 
     modalInstance.result.then(function() {

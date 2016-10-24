@@ -18,7 +18,7 @@
       <hr/>
 
       <!-- RESULTS --> 
-<!--       <div>
+       <div>
         <div ng-show="ctrl.entities.length > 1">
           <div ng-repeat="entity in ctrl.entities track by $index">
             <br/><pre><json-formatter open="1" json="entity"></json-formatter></pre>
@@ -27,7 +27,7 @@
         <div>
           <pre ng-show="ctrl.entities.length === 1" class="ng-hide"><json-formatter open="1" json="ctrl.entity"></json-formatter></pre>
         </div>
-      </div> -->
+      </div>
 
     </div>
   </div>
@@ -45,13 +45,14 @@
         <textarea class="form-control" rows="5"></textarea>
         <br/>
         <div ng-show="validationErrorAlert" class="ng-hide">
-          <!-- TODO: Show alert message -->
+          <div class="alert alert-danger" role="alert">
+            <strong>Error!</strong> Query validation failed. Please correct the query to proceed or Cancel to exit.
+          </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button ng-show="validateButton" class="btn btn-primary" type="button" ng-click="validate()">Validate</button>
-        <button ng-show="queryButton" class="btn btn-primary ng-hide" type="button" ng-click="query()">Query</button>
-        <button ng-show="saveButton" class="btn btn-primary ng-hide" type="button" ng-click="save()">Save</button>
+        <button class="btn btn-primary" type="button" ng-click="query()">Query</button>
+        <button class="btn btn-primary" type="button" ng-click="save()">Save</button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
