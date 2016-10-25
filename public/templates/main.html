@@ -2,15 +2,23 @@
   <div class="row">
     <div class="col-xs-12">
 
-      <span class="col-xs-12"><h1>Welcome to Explorer</h1></span>
+      <span class="col-xs-12">
+        <h1>Welcome to Explorer</h1>
+        <br/>
+        <label>Select from existing entity names or create a new one:</label>
+      </span>
       <div class="clearfix"></div>
       
       <span class="col-xs-8">
-        <input ng-model="ctrl.query" type="text" class="form-control" placeholder="Enter entity name">
+        <div class="form-group">
+          <select class="form-control">
+            <option ng-repeat="entityName in ctrl.fetchedEntities track by $index">{{entityName}}</option>
+          </select>
+        </div>
       </span>
       <span class="col-xs-4">
-          <button class="btn btn-primary" type="button" ng-click="ctrl.getResults()">Open</button>
-          <button class="btn btn-secondary" type="button" ng-click="ctrl.createNewEntity()">New</button>
+        <button class="btn btn-primary" type="button" ng-click="ctrl.getResults()">Open</button>
+        <button class="btn btn-secondary" type="button" ng-click="ctrl.createNewEntity()">New</button>
       </span>
 
       <div class="clearfix"></div>
@@ -18,16 +26,54 @@
       <hr/>
 
       <!-- RESULTS --> 
-       <div>
+      <div class="col-xs-10">
         <div ng-show="ctrl.entities.length > 1">
           <div ng-repeat="entity in ctrl.entities track by $index">
-            <br/><pre><json-formatter open="1" json="entity"></json-formatter></pre>
+            <form name="outerForm" class="tab-form-demo">
+              <uib-tabset active="activeForm">
+                <uib-tab index="0" heading="JSON">
+                  <ng-form name="nestedForm">
+                    <div class="form-group">
+                      <br/>
+                      <pre><json-formatter open="1" json="entity"></json-formatter></pre>
+                      <br/>
+                    </div>
+                  </ng-form>
+                </uib-tab>
+                <uib-tab index="1" heading="Link">
+                  <br/>
+                  <pre ng-click="ctrl.join()">Some Tab Content</pre>
+                  <br/>
+                </uib-tab>
+              </uib-tabset>
+            </form>
           </div>
         </div>
-        <div>
-          <pre ng-show="ctrl.entities.length === 1" class="ng-hide"><json-formatter open="1" json="ctrl.entity"></json-formatter></pre>
+
+        <!-- For only one result -->
+        <div ng-show="ctrl.entities.length === 1">
+          <form name="outerForm" class="tab-form-demo">
+              <uib-tabset active="activeForm">
+                <uib-tab index="0" heading="JSON">
+                  <ng-form name="nestedForm">
+                    <div class="form-group">
+                      <br/>
+                      <pre><json-formatter open="1" json="entity"></json-formatter></pre>
+                      <br/>
+                    </div>
+                  </ng-form>
+                </uib-tab>
+                <uib-tab index="1" heading="Link">
+                  <br/>
+                  <pre>Some Tab Content</pre>
+                  <br/>
+                </uib-tab>
+              </uib-tabset>
+          </form>         
         </div>
       </div>
+
+      <div class="clearfix"></div>
 
     </div>
   </div>
@@ -35,7 +81,7 @@
 
 <script type="text/ng-template" id="modal.html">
     <div class="modal-header">
-        <h3 class="modal-title">New</h3>
+        <h3 class="modal-title">Query/Save New Entity</h3>
     </div>
     <div class="modal-body">
         <label>Entity name:</label>
@@ -53,6 +99,22 @@
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="query()">Query</button>
         <button class="btn btn-primary" type="button" ng-click="save()">Save</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="joinModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Join With Another Entity</h3>
+    </div>
+    <div class="modal-body">
+        <label>Select existing entity to join with:</label>
+        <select class="form-control">
+            <option></option>
+        </select>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="execJoin()">Join</button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
