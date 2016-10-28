@@ -11,7 +11,7 @@
       
       <span class="col-xs-8">
         <div class="form-group">
-          <select class="form-control">
+          <select class="form-control" ng-model="ctrl.entityName" ng-required="true">
             <option ng-repeat="entityName in ctrl.fetchedEntities track by $index">{{entityName}}</option>
           </select>
         </div>
@@ -65,7 +65,7 @@
                 </uib-tab>
                 <uib-tab index="1" heading="Link">
                   <br/>
-                  <pre>Some Tab Content</pre>
+                  <pre>Link</pre>
                   <br/>
                 </uib-tab>
               </uib-tabset>
@@ -85,10 +85,10 @@
     </div>
     <div class="modal-body">
         <label>Entity name:</label>
-        <input type="text" class="form-control">
+        <input type="text" class="form-control" ng-model="userInputEntityName" ng-required="true">
         <br/>
         <label>Query:</label>
-        <textarea class="form-control" rows="5"></textarea>
+        <textarea class="form-control" rows="5" ng-required="true"></textarea>
         <br/>
         <div ng-show="validationErrorAlert" class="ng-hide">
           <div class="alert alert-danger" role="alert">
@@ -109,8 +109,8 @@
     </div>
     <div class="modal-body">
         <label>Select existing entity to join with:</label>
-        <select class="form-control">
-            <option></option>
+        <select class="form-control" ng-model="joinEntityName" ng-required="true">
+            <option ng-repeat="joinEntityName in fetchedJoinEntities track by $index">{{joinEntityName}}</option>
         </select>
     </div>
     <div class="modal-footer">

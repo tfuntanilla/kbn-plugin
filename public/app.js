@@ -9,6 +9,7 @@ import jsonFormatter from 'jsonformatter';
 
 import _ from 'lodash';
 import 'angular-ui-bootstrap';
+import 'angular-sanitize';
 
 // Usually, this is added to the HTML, but not sure how to do that here in Kibana
 import './css/json-formatter.css';
@@ -28,10 +29,11 @@ uiRoutes
 
 
 uiModules
-.get('app/log_engine', ['ui.bootstrap', 'jsonFormatter'])
+.get('app/log_engine', ['ui.bootstrap', 'jsonFormatter', 'ngSanitize'])
 .controller('indexPageController', function ($http) {
 
   $http.get(`../api/log_engine/indices`).then((response) => {
+    console.log(response.data);
     this.indices = response.data;
   });  
 
@@ -41,25 +43,47 @@ uiModules
 
   this.index = $routeParams.name;
 
-  // TODO
-  // call fetch entities API
-  // put all saved entities' name in an array
-  this.app = "ClipOnClip";
-  this.fetchedEntities = ['entity name 1', 'entity name 2'];
+  // TODO figure out how to get the values for these
+  // this.app = ?
+  // this.env = ?
 
-  $http.post(`http://127.0.0.1:8080/clip/entity/fetch?app=${this.app}`).then((response) => {
-    // this.fetchedEntities = ...
-    console.log(response);
-  }); 
+  // TODO: fix url
+  // fetch all entities for this app-env
+  // this.app = 'TestApp';
+  // this.env = 'TestEnv';
+  // $http.post(`http://127.0.0.1:8080/clip/entity/fetchAllEntities?app=${this.app}&env=${this.env}`).then((response) => {
+  //   this.fetchedEntities = response.data;
+  //   console.log(response);
+  // }); 
+
+  // DUMMY DATA
+  this.fetchedEntities = ['entity a', 'entity b', 'entity c'];
 
   // search for entity via query
+  let $res_ent = this;
   this.getResults = function() {
 
-    // TODO 
-    // call API for querying via entity name
+    if ($res_ent.entityName === undefined) {
+      console.log("No entity selected.");
+      return;
+    }
 
+    // TODO 
+    // this.app = ?
+    // this.env = ?
+    // this.entityName = $res_ent.entityName;
+    console.log($res_ent.entityName);
+
+    // TODO: fix url
+    // fetch entity via entity name
+    // $http.get(`http://127.0.0.1:8080/clip/entity/fetchEntity?app=${this.app}&env=${this.env}&entity=${this.entityName}`).then((response) => {
+    //   this.fetchedEntities = response.data;
+    //   console.log(response);
+    // });
+
+    // FOR TESTING
     $http.get(`../api/log_engine/index/bank`).then((response) => {
-       this.entities = response.data;
+      this.entities = response.data;
     });
 
   };
@@ -87,14 +111,17 @@ uiModules
         
         $scope.save = function() {
 
-          var isValidQuery = false;
+          var isValid = false;
 
           // TODO
           // change the API call to save API
+          
           $http.get(`../api/log_engine/index/bank`).then((response) => {
-            isValidQuery = true;
+            // TODO
+            // depending on the response determing if query is valid or not
+            // isValid = ?
             $scope.data = response.data;
-            if (isValidQuery) {
+            if (isValid) {
               $ctrl.displayResults($scope.data);
               $scope.validationErrorAlert = false;
               $uibModalInstance.close();
@@ -107,14 +134,17 @@ uiModules
 
         $scope.query = function() {
 
-          var isValidQuery = false;
+          var isValid = false;
 
           // TODO
           // change the API call to query API
+          // $http.get(`http://127.0.0.1:8080/clip/entity/...`).then((response) => {
           $http.get(`../api/log_engine/index/bank`).then((response) => {
-            isValidQuery = false;
+            // TODO
+            // depending on the response determing if query is valid or not
+            // isValid = ?
             $scope.data = response.data;
-            if (isValidQuery) {
+            if (isValid) {
               $ctrl.displayResults($scope.data);
               $scope.validationErrorAlert = false;
               $uibModalInstance.close();
@@ -149,9 +179,21 @@ uiModules
       templateUrl: 'joinModal.html',
       controller: function($scope, $uibModalInstance) {
 
+        // TODO
+        // fetch entities that can be used for joining
+
+        $scope.fetchedJoinEntities = ['join entity a', 'join entity b'];
+
         $scope.execJoin = function() {
 
+          if ($scope.joinEntityName === undefined) {
+            console.log("No entity selected.");
+          }
+
+          console.log($scope.joinEntityName);
+
           // TODO
+          // api call to join the entities
 
         }
 
